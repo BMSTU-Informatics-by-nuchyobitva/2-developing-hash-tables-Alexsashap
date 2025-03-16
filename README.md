@@ -1,104 +1,193 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/BX65L5j-)
 # Семинар 2
+## 20 Вариант: Метод Цепочек  
 
-Данная работа направлена на изучение структур данных типа Hash Table.
-В рамках данной работы вам предстоит выполнить следующие задания:
-
-- [ ] Освежить память в части хэш-таблиц, поработав с [симулятором заполнения хэш-таблицы](https://www.cs.usfca.edu/~galles/visualization/OpenHash.html)
-- [ ] Поэкспериментировать с хэш-таблицами в [симуляторе кастомных хэш-функций](https://iswsa.acm.org/mphf/openDSAPerfectHashAnimation/perfectHashAV.html). Здесь можно выбрать разные хэш-функции, методы разрешения коллизий и т.д.
-- [ ] Прочитайте [полезную статью](https://habr.com/ru/companies/ruvds/articles/747084/), чтобы дальше было проще создать свою хэш-функцию
-- [ ] Далее определите свой вариант **N**, чтобы выполнить задание ниже
-- [ ] Сделайте отчёт о проделанной работе
-
-Выберите ваш метод разрешения коллизий:
-- N % 4 = 0 - **Метод цепочек** 
-- N % 4 = 1 - **Открытая адресация: линейное пробирование**
-- N % 4 = 2 - **Открытая адресация: квадратичное пробирование**
-- N % 4 = 3 - **Открытая адресация: двойное хэширование**
-
-Далее вам необходимо придумать любой класс данных. Неважно, что это будет, главное, чтобы:
-1) Вы придумали его **сами**!
-2) В нём было хотя бы одно поле типа **int** и одно типа **string** (больше - на ваше усмотрение)
-
-Что-то типа такого:
-
-```
-class myTypeOfData{
-	int year;
-	string name;
-	// other variables (if needed)
-};
-```
-Только из названия вашего типа данных, должно быть понятно, что это. То есть типа class Student с номером зачётки и именем, или class Car и т.д.
-
-Далее необходимо реализовать классическую хэш-таблицу, со следующими параметрами. У хэш-таблицы должны быть:
-
-- [ ] Метод вставки элемента
-- [ ] Метод поиска элемента
-- [ ] Метод удаления элемента
-- [ ] Метод вывода хэш-таблицы
-- [ ] Сама хэш-функция (разумеется!)
-
-Самый главный параметр оценки вашей работы - это оригинальность вашей хэш-функции, вы можете использовать разные методы:
-- Комбинирование хэшей полей
-- Полиномиальное хэширование
-- Хэширование на основе битовых операций
-- Хэширование на основе строкового представления
-
-В результате, исходя из того, как вы строите хэш-таблицу, у каждого код будет выглядеть по-своему.
-Шаблоны в итоговой сборке использовать не надо (шаблоны только в примере для абстракции), только стандартные типы данных, по итогу должен получиться файл .cpp примерно такого содержания:
-
-```
-#include <iostream>
-#include <vector>
-#include <list>
-#include <string>
-
-template <typename K, typename V>
-struct KeyValuePair {
-    K key;
-    V value;
-};
-
-template <typename K, typename V, typename Hash = std::hash<K>>
-class HashTable {
-private:
-    std::vector<std::list<KeyValuePair<K, V>>> table; // Вектор списков для хранения данных
-    size_t capacity; // Размер таблицы
-    Hash hashFunction; // Хэш-функция
-
-    // Внутренние методы
-    size_t getIndex(const K& key) const; // Получить индекс по ключу
-    void rehash(); // Рехэширование
-
+``` c++
+class TennisPlayer { // класс теннисистов
+	std::string surname; //фамилия спортсмена
+	std::string city; // город, который представляет спортсмен
+	int year; //год рождения
+	int rankings; // рейтинг
+	bool deleted = false; // для проверки удален объект или нет
 public:
-    // Конструкторы
-    HashTable(size_t initialCapacity = 10);
-    ~HashTable();
+	TennisPlayer(std::string _surname, std::string _city, int _year, int _rankings) // конструктор
+		: surname(_surname), city(_city), year(_year), rankings(_rankings) {
+	}
 
-    // Основные операции
-    void insert(const K& key, const V& value); // Вставка элемента
-    bool remove(const K& key); // Удаление элемента
-    bool find(const K& key, V& value) const; // Поиск элемента
-    void clear(); // Очистка таблицы
+	std::string get_surname() const {
+		return surname;
+	}
+	std::string get_city() const {
+		return city;
+	}
+	int get_year() const {
+		return year;
+	}
+	int get_rankings() const {
+		return rankings;
+	}
 
-    // Дополнительные методы
-    size_t size() const; // Количество элементов в таблице
-    bool isEmpty() const; // Проверка на пустоту
-    void print() const; // Вывод таблицы
-
-    // Итераторы (опционально)
-    class Iterator;
-    Iterator begin();
-    Iterator end();
+	bool get_deleted() const {
+		return deleted;
+	}
+	void set_deleted() { // пометка, что объект удалён
+		deleted = true;
+	}
+	bool operator==(const TennisPlayer& other) const { // оператор сравнения двух спортсменов
+		return (surname == other.get_surname() && city == other.get_city() && year == other.get_year() &&
+			rankings == other.get_rankings());
+	}
 };
+```
+Был создан класс, состоющий из строк и целочисленных переменных.  Также были реализованы конструктор класса, геттеры, сеттер, перегрузка оператора ==.  
 
+```c++
+class HashTable {
+	std::vector < std::list <TennisPlayer>> table; // Вектор списков для хранения данных
+	size_t capacity; // Размер таблицы
+	size_t realsize;
+
+	size_t Hash(const std::string& key) const { // хэш-функция
+		const int N = 461; 
+		const int m = 7;     
+		const int r = 47;     
+		
+		int len = key.length();
+		long long hash=0;
+		for (char i:key) {
+			hash += ((int(i) + (int(i) * m ^ (len - 1) % N))%N)+r;
+			len = len - 1;
+		}
+		return hash % capacity;
+	}
+```
+Написан класс HashTable и реализована хэш-функция, в основе которой лежит метод полиномиального хеширования.  
+Преимуществами этого метода является:  
+* Легкая реализация и достаточно быстрое исполнение.  
+* Обеспечивает хорошее распределение хеш-значений для большинства строк.  
+* Но для уменьшения возможных коллизий необходимо правильно подобрать простые числа.  
+
+```c++
+long long get_index(const std::string& key) const { // получение индекса в хэш-таблице по ключу
+	size_t index = Hash(key);
+	return index;
+}
+void rehash() { // рехэшируем, когда таблица заполняется на 0.75
+	size_t new_capacity = capacity * 2;
+	std::vector<std::list <TennisPlayer>> new_table(new_capacity);
+	for (size_t i = 0; i < capacity; i++) {
+		if (!(table[i].empty())) { // переносим не удалённые элементы
+			for (auto& player : table[i]) {
+				if ((player).get_deleted() == false) {
+					size_t new_index = Hash((player).get_surname());
+					new_table[new_index].push_back(player);
+				}
+			}
+		}
+	}
+		table = std::move(new_table); // переносим новую таблицу
+		capacity = new_capacity;
+}
 
 ```
+Cозданы методы get_index, который позволяет найти индекс, который равен ключу после применения хэш функции, и rehash, который сщздают таблицу в 2 раза больше при заполнении таблице на 75%. Метод rehash пересчитывает индексы элементов, которые были ранее добавлены в таблицу и не были удалены, и добавляет их в новую таблицу.  
 
-Отчёт о проделанной работе должен содержать:
-- [ ] Скриншот из [симулятора кастомных хэш-функций](https://iswsa.acm.org/mphf/openDSAPerfectHashAnimation/perfectHashAV.html), на котором вы показали, что работали с ним и заполнили его.
-- [ ] Файл .cpp с реализацией хэш-таблицы должен лежать в репозитории
-- [ ] В readme напишите свой вариант по списку и какое задание вам досталось, расскажите алгоритм работы, обоснование выбранных методов хэширования и типов данных
-- [ ] Всегда есть поле для творческой работы, поэтому можно по желанию добавить фичи или интересные доп. функции к хэш-таблице и рассказать о них 
+```c++
+HashTable(size_t initial_size = 13)  // конструктор, по умолчанию размер 13
+	: capacity(initial_size), realsize(0) {
+	// инициализируем table с capacity пустыми списками
+	table.resize(capacity);
+}
 
+~HashTable() { // деструктор
+	clear();
+}
+```
+
+```c++
+void insert(const std::string& key, TennisPlayer& value) { // вставка элемента
+	size_t index = Hash(key);
+	for (auto& player : table[index]) {
+		if (player.get_surname() == key && !player.get_deleted()) { // если ключ уже есть в таблице - перезаписываем
+			player = value;
+			return;
+		}
+	}
+	table[index].push_back(value); // добавляем новый элемент
+	realsize++;
+
+	if ((double)realsize / capacity >= 0.75) { // проверка заполненности
+		rehash();
+	}
+}
+```
+Вставка нового элемента реализуется через insert, который включает проверку нет ли данных на этот ключ. Если ключа нет в таблице, то добавляет элемент в нужный индекс и проверяет заполненность хэш-таблицы(при необходимости вызывает rehash)  
+
+```c++
+bool find(const std::string& key, const TennisPlayer& value) const { 
+	long long index = get_index(key);
+	for (auto& player : table[index]) {
+		if ((player).get_deleted() == true || (!((player) == value)))
+			return false;
+	}
+	return true;
+}
+
+bool remove(const std::string key) { // true - если удалось удалить элемент, false - если элемент не найден
+	long long index = get_index(key);
+	for (auto& player : table[index]) {
+		if ((player).get_surname() == key) {
+			(player).set_deleted();
+			realsize--;
+			return true;
+		}
+	}
+	return false;
+}
+```
+
+Реализован метод find - поиск по ключу и значению, и метод remove, который получает на вход ключ и при наличии такого элемента, удаляет его, переводя флаг deleted из false в true.  
+
+```c++
+	void clear() { // очистка таблицы
+		for (size_t i = 0; i < capacity; ++i) {
+			for (auto& player : table[i]) {
+				(player).set_deleted();
+			}
+			if (!table[i].empty()) {
+				table[i].clear();
+			}
+		}
+		realsize = 0;
+	}
+
+	void print() const { // вывод таблицы на экран
+		for (size_t i = 0; i < capacity; i++) {
+			int j = 0;// флаг, что все элементы удалены
+			std::cout << "table[" << i << "] --> ";
+			if (!table[i].empty()) {
+				for (const auto& player : table[i]) {
+					if (!player.get_deleted()) {
+						j = 1;
+						std::cout << "Surname: " << player.get_surname() << "; ";
+						std::cout << "City: " << player.get_city() << "; ";
+						std::cout << "Year: " << player.get_year() << "; ";
+						std::cout << "Rankings: " << player.get_rankings() << std::endl;
+					}
+				}
+				if (j == 0) {
+					std::cout << "NOT" << std::endl;
+				}
+			}
+			else {
+				std::cout << "NOT" << std::endl;
+			}
+		}
+	}
+};
+
+```
+Метод clear переводит все флаг deleted из false в true и отчищает списки, из которых состоит таблица.  
+Print выводит на экран все элементы, которые находятся в таблице в момент вызова, в представленном формате.  
+
+![Скрин симмулятора](Снимок экрана 2025-03-15 234928.png)
